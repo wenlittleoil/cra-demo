@@ -1,0 +1,21 @@
+
+.dashboard-layout {
+  min-height: 100vh;
+  .dashboard-sider {
+    .logo {
+      width: 100%;
+      height: 64px;
+    }
+  }
+  .site-layout {
+    .site-layout-header {
+      background-color: #fff;
+    }
+    .site-layout-content {
+      margin: 24px 16px;
+      padding: 24px;
+      background-color: #fff;
+    }
+  }
+}
+
