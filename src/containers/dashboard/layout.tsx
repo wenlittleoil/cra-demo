@@ -40,6 +40,19 @@ const getActiveMenuItem = (menuItems = [], keyPath = []) => {
   return activeMenuItem;
 }
 
+const getMenuItemKeyPathMap = (menuItems) => {
+  const obj = {}
+  const loopSet = (menuItems = []) => {
+    menuItems.forEach(menuItem => {
+      obj[menuItem.key] = menuItem;
+      if (menuItem.children) loopSet(menuItem.children);
+    });
+  }
+  loopSet(menuItems);
+  return obj;
+}
+
+
 // 通过path关键词
 
 const DashboardLayout = (props: PropsWithChildren<Props>) => {
@@ -48,9 +61,12 @@ const DashboardLayout = (props: PropsWithChildren<Props>) => {
   } = props;
   const params = useParams();
   const location = useLocation();
-  console.log('hello', params, location)
+  const pathname = location.pathname;
+  const pathnameWords = pathname.split('/');
+  const pathnameLastWord = pathnameWords[pathnameWords.length - 1];
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+
   const menuItems = [
     {
       key: '1',
@@ -103,10 +119,23 @@ const DashboardLayout = (props: PropsWithChildren<Props>) => {
       path: 'user',
     },
   ];
+  const menuItemKeyMap = getMenuItemKeyPathMap(menuItems);
+
   const onClick: MenuProps['onClick'] = event => {
     const activeMenuItem = getActiveMenuItem(menuItems, event.keyPath);
     navigate(`${activeMenuItem.path}`);
   };
+
+  const defaultSelectedKeys = (() => {
+    const keys = [];
+    Object.keys(menuItemKeyMap).forEach(key => {
+      if (menuItemKeyMap[key].path === pathnameLastWord) {
+        keys.push(key);
+      }
+    });
+    return keys;
+  })();
+
   return (
     <Layout className="dashboard-layout">
       <Sider className="dashboard-sider" trigger={null} collapsible collapsed={collapsed}>
@@ -115,7 +144,8 @@ const DashboardLayout = (props: PropsWithChildren<Props>) => {
           onClick={onClick}
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['1-1']}
+          // defaultSelectedKeys={['1-1']}
+          defaultSelectedKeys={defaultSelectedKeys}
           defaultOpenKeys={['1', '3']}
           items={menuItems}
         />
