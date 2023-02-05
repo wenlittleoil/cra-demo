@@ -12,7 +12,7 @@ import DashboardPage from 'containers/dashboard';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/wen-base'>
       <Routes>
         <Route path="dashboard/*" element={<DashboardPage />} />
         <Route path="login" element={<LoginPage />} />

@@ -2,6 +2,8 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "homepage2": ".",
+  "homepage": "http://mywebsite.com/wen-base",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
@@ -12,6 +14,7 @@
     "@types/react-dom": "^18.0.0",
     "antd": "^4.22.2",
     "env-cmd": "^10.1.0",
+    "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
@@ -24,6 +27,7 @@
     "start": "env-cmd -f config/.env.local react-scripts start",
     "build:dev": "env-cmd -f config/.env.dev react-scripts build",
     "build:prod": "env-cmd -f config/.env.prod react-scripts build",
+    "server": "node server",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
