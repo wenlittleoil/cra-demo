@@ -10,6 +10,8 @@ import NotFound from 'components/NotFound';
 import LoginPage from 'containers/login';
 import DashboardPage from 'containers/dashboard';
 
+console.log('process.env.REACT_APP_ENV', process.env.REACT_APP_ENV)
+
 function App() {
   return (
     <BrowserRouter basename='/wen-base'>
