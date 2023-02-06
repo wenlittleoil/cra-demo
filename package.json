@@ -2,7 +2,6 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "homepage2": ".",
   "homepage": "http://mywebsite.com/wen-base",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
@@ -27,7 +26,7 @@
     "start": "env-cmd -f config/.env.local react-scripts start",
     "build:dev": "env-cmd -f config/.env.dev react-scripts build",
     "build:prod": "env-cmd -f config/.env.prod react-scripts build",
-    "server": "node server",
+    "server": "yarn build:dev && node server",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
