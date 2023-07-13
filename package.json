@@ -27,7 +27,8 @@
     "start": "env-cmd -f config/.env.local react-scripts start",
     "build:dev": "env-cmd -f config/.env.dev react-scripts build",
     "build:prod": "env-cmd -f config/.env.prod react-scripts build",
-    "server": "yarn build:dev && node server",
+    "server:dev": "yarn build:dev && node server",
+    "server:prod": "yarn build:prod && node server",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

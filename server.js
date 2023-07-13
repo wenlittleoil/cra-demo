@@ -1,3 +1,7 @@
+/**
+ * 仅供本地开发调试使用
+ * 若要部署到服务器，则需要引入webpack将该文件构建并输出
+ */
 const express = require('express');
 const path = require('path');
 
