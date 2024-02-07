@@ -10,6 +10,7 @@ import './App.css';
 import NotFound from 'components/NotFound';
 import LoginPage from 'containers/login';
 import DashboardPage from 'containers/dashboard';
+import VideoPage from 'containers/video';
 
 console.log('process.env.REACT_APP_ENV', process.env.REACT_APP_ENV)
 
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path="dashboard/*" element={<DashboardPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="video" element={<VideoPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
