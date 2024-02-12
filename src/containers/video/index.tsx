@@ -79,11 +79,13 @@ const VideoPage = () => {
     <div>
       <video 
         // muted 
-        loop
+        // loop
       />
-      <button className='play-btn' onClick={handleClickPlay}>播放</button>
-      <button className='pause-btn' onClick={handleClickPause}>暂停</button>
-      <button className='back-btn' onClick={handleClickBack}>回到第20s</button>
+      <div>
+        <button className='play-btn' onClick={handleClickPlay}>播放</button>
+        <button className='pause-btn' onClick={handleClickPause}>暂停</button>
+        <button className='back-btn' onClick={handleClickBack}>回到第20s</button>
+      </div>
     </div>
   )
 }
