@@ -9,8 +9,8 @@ const VideoPage = () => {
 
     const assetURL = "/api/media/test.mp4";
     // Need to be specific for Blink regarding codecs
-    // ./mp4info frag_bunny.mp4 | grep Codec
-    const mimeCodec = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
+    // ./mp4info test.mp4 | grep Codec
+    const mimeCodec = 'video/mp4; codecs="avc1.64081F, mp4a.40.2"';
 
     if ("MediaSource" in window && MediaSource.isTypeSupported(mimeCodec)) {
       const mediaSource = new MediaSource();
