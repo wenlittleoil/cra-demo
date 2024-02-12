@@ -8,6 +8,7 @@ const VideoPage = () => {
     const video = document.querySelector("video");
 
     const assetURL = "/api/media/test.mp4";
+    // 使用Bento4下bin提供的命令行工具分析mp4文件
     // Need to be specific for Blink regarding codecs
     // ./mp4info test.mp4 | grep Codec
     const mimeCodec = 'video/mp4; codecs="avc1.64081F, mp4a.40.2"';
