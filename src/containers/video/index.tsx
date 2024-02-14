@@ -78,6 +78,7 @@ const VideoPage = () => {
 
   return (
     <div>
+      {/* 流媒体 */}
       <video 
         // muted 
         // loop
@@ -87,6 +88,16 @@ const VideoPage = () => {
         <button className='pause-btn' onClick={handleClickPause}>暂停</button>
         <button className='back-btn' onClick={handleClickBack}>回到第20s</button>
       </div>
+
+      {/* 静态媒体 */}
+      <video 
+        src='/wen-base/media/test.webm' 
+        autoPlay 
+        muted 
+        style={{
+          marginTop: '20px',
+        }} 
+      />
     </div>
   )
 }
