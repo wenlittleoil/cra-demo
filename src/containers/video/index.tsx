@@ -89,13 +89,24 @@ const VideoPage = () => {
         <button className='back-btn' onClick={handleClickBack}>回到第20s</button>
       </div>
 
-      {/* 静态媒体 */}
-      <video 
-        src='/wen-base/media/test.webm' 
+      {/* 静态媒体(也是边下边播) */}
+      {/* <video 
+        src='/wen-base/media/test-static.webm' 
         autoPlay 
         muted 
         style={{
           marginTop: '20px',
+        }} 
+      /> */}
+      <video 
+        src='/wen-base/media/test-static.mp4' 
+        autoPlay 
+        muted 
+        style={{
+          marginTop: '20px',
+          width: '400px',
+          height: '400px',
+          objectFit: 'contain',
         }} 
       />
     </div>
