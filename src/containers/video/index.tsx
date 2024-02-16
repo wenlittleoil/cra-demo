@@ -89,17 +89,17 @@ const VideoPage = () => {
         <button className='back-btn' onClick={handleClickBack}>回到第20s</button>
       </div>
 
-      {/* 静态媒体(也是边下边播) */}
-      {/* <video 
+      {/* 静态媒体(边下边播) */}
+      <video 
         src='/wen-base/media/test-static.webm' 
         autoPlay 
         muted 
         style={{
           marginTop: '20px',
         }} 
-      /> */}
-      <video 
-        src='/wen-base/media/test-static.mp4' 
+      />
+      {/* <video 
+        src='https://graff-1253185145.cos.ap-guangzhou.myqcloud.com/test-static-1708072702709.mp4' 
         autoPlay 
         muted 
         style={{
@@ -108,7 +108,7 @@ const VideoPage = () => {
           height: '400px',
           objectFit: 'contain',
         }} 
-      />
+      /> */}
     </div>
   )
 }
