@@ -4,7 +4,11 @@ const Index = () => {
   useEffect(() => {
     const v = document.querySelector('video')
     navigator.mediaDevices.getUserMedia({
-      video: true,
+      // video: true,
+      video: {
+        width: 500,
+        height: 800,
+      },
       audio: false,
     }).then(stream => {
       console.log('getUserMedia-success', stream)
@@ -16,7 +20,7 @@ const Index = () => {
 
     const width = 400;
     v.addEventListener('canplay', ev => {
-      console.log('可以播放了', v)
+      console.log('原始视频宽高：', v.videoWidth, v.videoHeight)
       // 通过实际视频宽高确定容器video元素的宽高
       const height = (v.videoHeight / v.videoWidth) * width;
       v.setAttribute('width', `${width}px`);
