@@ -12,6 +12,7 @@ import LoginPage from 'containers/login';
 import DashboardPage from 'containers/dashboard';
 import VideoPage from 'containers/video';
 import WebrtcPage from 'containers/webrtc';
+import Webrtc2Page from 'containers/webrtc2';
 
 console.log('process.env.REACT_APP_ENV', process.env.REACT_APP_ENV)
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="login" element={<LoginPage />} />
         <Route path="video" element={<VideoPage />} />
         <Route path="webrtc" element={<WebrtcPage />} />
+        <Route path="webrtc2" element={<Webrtc2Page />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
