@@ -4,7 +4,8 @@
  */
 const express = require('express');
 const path = require('path');
-const { WebSocketServer } = require('ws');
+const WebSocket = require('ws');
+const { WebSocketServer } = WebSocket;
 
 const app = express();
 
@@ -31,12 +32,23 @@ const nativeHttpServer = app.listen(port, () => {
 });
 
 // listen to websockets on an Express server.
-const wsServer = new WebSocketServer({ noServer: true });
-wsServer.on('connection', socket => {
-  socket.on('message', message => console.log(message.toString()));
+const wss = new WebSocketServer({ noServer: true });
+wss.on('connection', socket => {
+  socket.on('message', (data, isBinary) => {
+    console.log(data.toString())
+    // A client WebSocket broadcasting to every other connected WebSocket clients, excluding itself.
+    wss.clients.forEach(client => {
+      if (
+        client !== socket && 
+        client.readyState === WebSocket.OPEN
+      ) {
+        client.send(data, { binary: isBinary });
+      }
+    });
+  });
 });
 nativeHttpServer.on('upgrade', (request, socket, head) => {
-  wsServer.handleUpgrade(request, socket, head, socket => {
-    wsServer.emit('connection', socket, request);
+  wss.handleUpgrade(request, socket, head, socket => {
+    wss.emit('connection', socket, request);
   });
 });
