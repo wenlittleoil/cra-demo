@@ -4,6 +4,7 @@
  */
 const express = require('express');
 const path = require('path');
+const registeApi = require('./routes/registeApi');
 const WebSocket = require('ws');
 const { WebSocketServer } = WebSocket;
 
@@ -19,6 +20,10 @@ const assetURL = "/api/media/test.mp4";
 app.use(assetURL, function (req, res) {
   res.sendFile(path.join(feBasePath, 'media', 'test.mp4'));
 })
+
+// convert request body to json object in req.body
+app.use('/api', express.json())
+registeApi(app);
 
 // 支持h5历史路由
 app.get('*', function (req, res) {
