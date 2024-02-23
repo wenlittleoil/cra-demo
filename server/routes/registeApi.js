@@ -5,13 +5,13 @@ const users = [
     logined: false,
   },
   {
-    name: 'lai',
-    password: '456',
+    name: 'jane',
+    password: '123',
     logined: false,
   },
   {
-    name: 'zhang',
-    password: '789',
+    name: 'jack',
+    password: '123',
     logined: false,
   },
 ];

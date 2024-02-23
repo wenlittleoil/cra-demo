@@ -12,7 +12,8 @@ const Index = () => {
     password: '',
   })
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:3000')
+    // const socket = new WebSocket('ws://localhost:3000')
+    const socket = new WebSocket('wss://localhost:3000')
     socket.addEventListener('open', function open() {
       socket.send('你好 123 world');
     });
@@ -73,7 +74,7 @@ const Index = () => {
     )
   }
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <div>用户：{user} <button onClick={logout}>退出登录</button></div>
       <div>
         <div>好友列表：</div>

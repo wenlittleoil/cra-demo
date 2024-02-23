@@ -4,6 +4,9 @@
  */
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 const registeApi = require('./routes/registeApi');
 const WebSocket = require('ws');
 const { WebSocketServer } = WebSocket;
@@ -32,7 +35,17 @@ app.get('*', function (req, res) {
 });
 
 const port = 3000;
-const nativeHttpServer = app.listen(port, () => {
+const options = {
+  key: fs.readFileSync(path.join(__dirname, './key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, './cert.pem')),
+};
+
+// const nativeHttpServer = app.listen(port, () => {
+//   console.log(`server is listening at ${port}`);
+// });
+// const nativeHttpServer = http.createServer(app);
+const nativeHttpServer = https.createServer(options, app);
+nativeHttpServer.listen(port, () => {
   console.log(`server is listening at ${port}`);
 });
 

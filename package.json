@@ -28,6 +28,10 @@
     "start": "env-cmd -f config/.env.local react-scripts start",
     "build:dev": "env-cmd -f config/.env.dev react-scripts build",
     "build:prod": "env-cmd -f config/.env.prod react-scripts build",
+
+    "watch:client": "watch 'yarn build:dev' ./src",
+    "watch:server": "nodemon server/index.js",
+
     "server:dev": "yarn build:dev && node server/index.js",
     "server:prod": "yarn build:prod && node server/index.js",
     "test": "react-scripts test",
@@ -50,5 +54,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "watch": "^1.0.2"
   }
 }
