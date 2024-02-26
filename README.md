@@ -9,3 +9,9 @@ $ ls -al
 $ chmod +x ./generate_cert.sh
 $ ./generate_cert.sh
 ```
+
+*本地开发和测试
+```
+yarn watch:client
+yarn watch:server
+```

@@ -2,17 +2,17 @@ const users = [
   {
     name: 'wen',
     password: '123',
-    logined: false,
+    logined: true,
   },
   {
     name: 'jane',
     password: '123',
-    logined: false,
+    logined: true,
   },
   {
     name: 'jack',
     password: '123',
-    logined: false,
+    logined: true,
   },
 ];
 

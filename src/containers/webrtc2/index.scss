@@ -1,0 +1,13 @@
+.webrtc2-page {
+  padding: 20px;
+  video {
+    &.remote {
+      width: 600px;
+      height: 450px;
+    }
+    &.local {
+      width: 200px;
+      height: 150px;
+    }
+  }
+}
