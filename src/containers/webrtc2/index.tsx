@@ -25,8 +25,9 @@ const Index = () => {
   })
   useEffect(() => {
     // 初始化页面时马上建立websocket连接，用于普通业务通信
-    // socket = new WebSocket('ws://localhost:3000')
-    socket = new WebSocket('wss://localhost:3000')
+    const host = `${window.location.hostname}:${window.location.port}`
+    // socket = new WebSocket(`ws://${host}`)
+    socket = new WebSocket(`wss://${host}`) // 'wss://localhost:3000'
     socket.addEventListener('open', () => {
       // socket.send('你好 123 world');
     });
@@ -80,7 +81,7 @@ const Index = () => {
     } else if (data.eventType === "opposite-candidate") {
       // A端和B端交换设置对方的ice候选
       const curRtcConnection = rtcConnectionA || rtcConnectionB;
-      curRtcConnection.addIceCandidate(new RTCIceCandidate(data.eventInfo));
+      curRtcConnection?.addIceCandidate(new RTCIceCandidate(data.eventInfo));
     }
   }
 
@@ -129,7 +130,6 @@ const Index = () => {
     const localVideo = document.querySelector('video.local') as HTMLMediaElement;
     localVideo.srcObject = localStream;
     localVideo.muted = true; // 本地端视频不需要重复听见自己的声音
-    localVideo.play(); // 需要设置播放，不然不会自动播放
     return localStream;
   }
 
@@ -138,7 +138,6 @@ const Index = () => {
     const remoteVideo = document.querySelector('video.remote') as HTMLMediaElement;
     remoteVideo.srcObject = remoteStream;
     remoteVideo.muted = false; // 需要听见远程端视频声音
-    remoteVideo.play(); // 需要设置播放，不然不会自动播放 
     return remoteStream;
   }
 
@@ -223,8 +222,8 @@ const Index = () => {
           })}
         </div>
         <div className="video-group">
-          <video className="remote" />
-          <video className="local" />
+          <video className="remote" autoPlay />
+          <video className="local" autoPlay />
         </div>
       </div>
     </div>
