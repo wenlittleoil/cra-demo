@@ -1,13 +1,22 @@
 .webrtc2-page {
   padding: 20px;
-  video {
-    &.remote {
-      width: 600px;
-      height: 450px;
-    }
-    &.local {
-      width: 200px;
-      height: 150px;
+  .video-group {
+    width: 600px;
+    height: 450px;
+    position: relative;
+    video {
+      &.remote {
+        width: 100%;
+        height: 100%;
+      }
+      &.local {
+        width: 200px;
+        height: 150px;
+        // 本地端视频在右下角
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
     }
   }
 }

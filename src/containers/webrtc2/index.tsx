@@ -222,7 +222,7 @@ const Index = () => {
             )
           })}
         </div>
-        <div>
+        <div className="video-group">
           <video className="remote" />
           <video className="local" />
         </div>
