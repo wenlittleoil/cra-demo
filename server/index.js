@@ -40,9 +40,7 @@ const options = {
   cert: fs.readFileSync(path.join(__dirname, './cert.pem')),
 };
 
-// const nativeHttpServer = app.listen(port, () => {
-//   console.log(`server is listening at ${port}`);
-// });
+/**服务端使用WebSocket的nodejs实现库ws，客户端使用浏览器原生的WebSocket API */
 // const nativeHttpServer = http.createServer(app);
 const nativeHttpServer = https.createServer(options, app);
 nativeHttpServer.listen(port, () => {
