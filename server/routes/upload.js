@@ -64,7 +64,7 @@ async function mergeChunksToFile(fileId, chunkTotal, originalFileName) {
     const chunkPath = path.join(chunksDir, `${fileId}-part${i}`); 
     const chunkBuffer = await fs.promises.readFile(chunkPath);
     fileWriteStream.write(chunkBuffer);
-    // 所有相关chunks合并成文件后，删掉原chunk文件
+    // 删掉原chunk文件
     // fs.unlinkSync(chunkPath);
   }
 }
