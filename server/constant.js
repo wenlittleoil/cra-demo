@@ -1,0 +1,2 @@
+
+exports.beBasePath = __dirname;

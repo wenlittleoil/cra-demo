@@ -36,7 +36,6 @@ const Index = () => {
       uploadProgress: 0,
     }))
     setCurFiles([...curFiles, ...customFiles]);
-    console.log('测试', customFiles)
   }
 
   const beginUpload = (customFile: FileWithUploadInfo) => {
@@ -58,9 +57,11 @@ const Index = () => {
       formData.append('chunkNo', String(chunkNo));
       formData.append('chunkTotal', String(chunkTotal));
       formData.append('fileId', customFile.fileId);
+      // 切成分片后，服务端不知道完整文件的原始名称和扩展，需要从前端传递过去
+      formData.append('originalFileName', customFile.originalFile.name);
 
       axios.post('/api/upload', formData).then(res => {
-        console.log('文件上传', res)
+        console.log('文件分片上传', res)
         if (res.data === 'success') {
           chunkNo++;
 
@@ -83,8 +84,11 @@ const Index = () => {
             message.success(`文件${file.name}上传成功`);
           }
         }
-      }).catch(console.log)
+      }).catch(console.log);
     }
+
+    // 启动上传
+    uploadChunk(chunkNo);
 
   }
    
@@ -129,19 +133,19 @@ const Index = () => {
                 {/* 测试断点续传 */}
                 {/* {status === EUploadStatus.uploading && (
                   <div>
-                    <Progress percent={customFile.uploadProgress * 100} />
+                    <Progress style={pgStyle} percent={customFile.uploadProgress * 100} />
                     <button>暂停</button>
                   </div>
                 )}
                 {status === EUploadStatus.paused && (
                   <div>
-                    <Progress percent={customFile.uploadProgress * 100} />
+                    <Progress style={pgStyle} percent={customFile.uploadProgress * 100} />
                     <button>继续</button>
                   </div>
                 )}
                 {status === EUploadStatus.completed && (
                   <div>
-                    <Progress percent={customFile.uploadProgress * 100} />
+                    <Progress style={pgStyle} percent={customFile.uploadProgress * 100} />
                     <div>上传完成！</div>
                   </div>
                 )} */}
