@@ -18,12 +18,6 @@ const feBasePath = path.join(__dirname, '..', 'build');
 // app.use(express.static(feBasePath));
 app.use('/wen-base', express.static(feBasePath)); // 基础资源公共路径
 
-// 获取视频时
-const assetURL = "/api/media/test.mp4";
-app.use(assetURL, function (req, res) {
-  res.sendFile(path.join(feBasePath, 'media', 'test.mp4'));
-})
-
 // convert request body to json object in req.body
 app.use('/api', express.json())
 registeApi(app);

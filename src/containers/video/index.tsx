@@ -5,7 +5,7 @@ const VideoPage = () => {
   const videoInited = useRef(false)
 
   useEffect(() => {
-    const video = document.querySelector("video");
+    const video = document.querySelector("#stream-media-video") as HTMLMediaElement;
 
     const assetURL = "/api/media/test.mp4";
     // 使用Bento4下bin提供的命令行工具分析mp4文件
@@ -80,6 +80,7 @@ const VideoPage = () => {
     <div>
       {/* 流媒体 */}
       <video 
+        id='stream-media-video'
         // muted 
         // loop
       />
@@ -90,14 +91,14 @@ const VideoPage = () => {
       </div>
 
       {/* 静态媒体(边下边播) */}
-      <video 
+      {/* <video 
         src='/wen-base/media/test-static.webm' 
         autoPlay 
         muted 
         style={{
           marginTop: '20px',
         }} 
-      />
+      /> */}
       {/* <video 
         src='https://graff-1253185145.cos.ap-guangzhou.myqcloud.com/test-static-1708072702709.mp4' 
         autoPlay 
