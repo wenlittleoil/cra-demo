@@ -33,6 +33,7 @@ const VideoPage = () => {
       const mediaSource = this;
 
       const playBtn = document.querySelector('.play-btn');
+      let count = 0;
       const init = () => {
         const sourceBuffer = mediaSource.addSourceBuffer(mimeCodec);
         sourceBuffer.mode = 'segments';
@@ -40,24 +41,25 @@ const VideoPage = () => {
           sourceBuffer.addEventListener('error', (e) => {
             console.error("sourceBuffer error", e);
           });
-          
+
           sourceBuffer.addEventListener("updateend", function (_) {
+            count++;
             // mediaSource.endOfStream();
 
             video.play();
             videoInited.current = true;
             playBtn.removeEventListener("click", init);
             //console.log(mediaSource.readyState); // ended
+
+            // 如果是分段获取，则接着获取后面0.5M部分
+            if (assetURL.includes("part-v2") && count === 1) {
+              fetchAB("/api/media/testmp4/part-v2?start=1000000&end=2000000", function (secondBuf) {
+                sourceBuffer.appendBuffer(secondBuf);
+              });
+            }
   
           });
           sourceBuffer.appendBuffer(buf);
-
-          // 如果是分段获取，则接着获取后面0.5M部分
-          if (assetURL.includes("part-v2")) {
-            fetchAB("/api/media/testmp4/part-v2?start=1000000&end=2000000", function (secondBuf) {
-              sourceBuffer.appendBuffer(secondBuf);
-            });
-          }
 
         });
       }
@@ -99,7 +101,7 @@ const VideoPage = () => {
       {/* 1、流媒体(通过xhr请求获取视频片段，视频已经提前被分割成片段放置在服务器磁盘中) */}
       <video 
         id='stream-media-video'
-        // muted 
+        muted 
         // loop
         width="400px"
         height="400px"
