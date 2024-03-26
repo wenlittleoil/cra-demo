@@ -44,8 +44,10 @@ const VideoPage = () => {
 
           sourceBuffer.addEventListener("updateend", function (_) {
             count++;
-            // mediaSource.endOfStream();
-
+            if (count === 2) {
+              mediaSource.endOfStream();
+            }
+            
             video.play();
             videoInited.current = true;
             playBtn.removeEventListener("click", init);
@@ -53,7 +55,7 @@ const VideoPage = () => {
 
             // 如果是分段获取，则接着获取后面0.5M部分
             if (assetURL.includes("part-v2") && count === 1) {
-              fetchAB("/api/media/testmp4/part-v2?start=1000000&end=2000000", function (secondBuf) {
+              fetchAB("/api/media/testmp4/part-v2?start=1000001&end=999999999999999", function (secondBuf) {
                 sourceBuffer.appendBuffer(secondBuf);
               });
             }

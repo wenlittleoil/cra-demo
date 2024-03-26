@@ -59,6 +59,7 @@ module.exports = app => {
     const videoSize = fs.statSync(mp4FilePath).size;
     const _end = Math.min(Number(end), videoSize - 1);
 
+    // both the start index and the end index will be included
     const videoStream = fs.createReadStream(mp4FilePath, { 
       start: _start, 
       end: _end,

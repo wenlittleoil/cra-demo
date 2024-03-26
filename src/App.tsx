@@ -11,6 +11,7 @@ import NotFound from 'components/NotFound';
 import LoginPage from 'containers/login';
 import DashboardPage from 'containers/dashboard';
 import VideoPage from 'containers/video';
+import Video2Page from 'containers/video2';
 import WebrtcPage from 'containers/webrtc';
 import Webrtc2Page from 'containers/webrtc2';
 import ThreejsPage from 'containers/threejs';
@@ -28,6 +29,7 @@ function App() {
         <Route path="dashboard/*" element={<DashboardPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="video" element={<VideoPage />} />
+        <Route path="video2" element={<Video2Page />} />
         <Route path="webrtc" element={<WebrtcPage />} />
         <Route path="webrtc2" element={<Webrtc2Page />} />
         <Route path="large-file-upload" element={<LfuPage />} />
