@@ -12,6 +12,7 @@ import LoginPage from 'containers/login';
 import DashboardPage from 'containers/dashboard';
 import VideoPage from 'containers/video';
 import Video2Page from 'containers/video2';
+import Video3Page from 'containers/video3';
 import WebrtcPage from 'containers/webrtc';
 import Webrtc2Page from 'containers/webrtc2';
 import ThreejsPage from 'containers/threejs';
@@ -30,6 +31,7 @@ function App() {
         <Route path="login" element={<LoginPage />} />
         <Route path="video" element={<VideoPage />} />
         <Route path="video2" element={<Video2Page />} />
+        <Route path="video3" element={<Video3Page />} />
         <Route path="webrtc" element={<WebrtcPage />} />
         <Route path="webrtc2" element={<Webrtc2Page />} />
         <Route path="large-file-upload" element={<LfuPage />} />

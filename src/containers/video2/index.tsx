@@ -10,10 +10,14 @@ const Index = () => {
   }
   return (
     <div className="video2-page">
-      <div><input type="file" onChange={onChange} /></div>
-      <div><video controls width={400} height={400} style={{ objectFit: 'contain' }} /></div>
+      <div>
+        <input type="file" onChange={onChange} />
+      </div>
+      <div>
+        <video controls width={400} height={400} style={{ objectFit: 'contain' }} />
+      </div>
     </div>
-  )
+  );
 }
 
 export default Index;

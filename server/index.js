@@ -38,7 +38,8 @@ const options = {
 // const nativeHttpServer = http.createServer(app);
 const nativeHttpServer = https.createServer(options, app);
 nativeHttpServer.listen(port, () => {
-  console.log(`server is listening at ${port}`);
+  const host = `${nativeHttpServer.cert ? 'https' : 'http'}://localhost:${port}`;
+  console.log(`server is listening at ${host}`);
 });
 
 // listen to websockets on an Express server.
