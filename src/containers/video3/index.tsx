@@ -1,3 +1,4 @@
+// 勿参考该案例，程序逻辑有缺陷
 import { useEffect } from "react";
 
 const Index = () => {
@@ -57,6 +58,8 @@ const Index = () => {
       fetchSegmentAndAppend("https://testcontent.eyevinn.technology/mse-tutorial/vinn-video=1660000.dash", sourceBuffer, function() {
 
         function iter() {
+          // 程序逻辑有缺陷，会被频繁调用
+          console.log('iter函数被调用啦');
 
           // Pop segment from queue
           url = queue.shift();
