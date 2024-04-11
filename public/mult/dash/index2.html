@@ -1,0 +1,29 @@
+<!-- dash协议传输流媒体案例2（使用本站内部资源） -->
+<!doctype html>
+<html>
+
+<head>
+  <title>Dash.js Rocks</title>
+  <style>
+    video {
+      width: 640px;
+      height: 360px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <video id="videoPlayer" controls></video>
+  </div>
+  <script src="./dash.all.min.js"></script>
+  <script>
+    (function () {
+      var url = "//localhost:3000/wen-base/mult/dash/13_dash.mpd";
+      var player = dashjs.MediaPlayer().create();
+      player.initialize(document.querySelector("#videoPlayer"), url, true);
+    })();
+  </script>
+</body>
+
+</html>
