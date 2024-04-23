@@ -1,3 +1,6 @@
+/**
+ * 生成dash视频片段的失败案例
+ */
 const ffmpeg = require('fluent-ffmpeg');
 const path = require('path');
 
@@ -5,14 +8,13 @@ const path = require('path');
 ffmpeg.setFfmpegPath('/usr/local/bin/ffmpeg');
 
 // Input video file
-const inputVideo = path.resolve(__dirname, 'input.mp4');
+const inputPath = 'input.mp4';
 
 // DASH output directory and files
-const outputDir = path.resolve(__dirname, 'dash_output');
-const outputManifest = path.join(outputDir, 'manifest.mpd');
+const outputPath = 'dash_output/manifest.mpd';
 
 // Configure FFmpeg for DASH transcoding
-ffmpeg(inputVideo)
+ffmpeg(inputPath)
   .outputOptions([
     // DASH options
     '-f dash',
@@ -21,10 +23,10 @@ ffmpeg(inputVideo)
     '-use_timeline 1',
     '-use_template 1',
     '-window_size 5',
-    // '-adaptation_sets "id=0,streams=v id=1,streams=a"',
 
-    '-adaptation_sets',
-    '"id=0,streams=v id=1,streams=a"',
+    '-adaptation_sets "id=0,streams=v id=1,streams=a"',
+    // '-adaptation_sets',
+    // '"id=0,streams=v id=1,streams=a"',
 
     // Video options
     '-map 0:v:0',
@@ -37,7 +39,7 @@ ffmpeg(inputVideo)
     '-c:a:0 aac',
     '-b:a:0 128k',
   ])
-  .output(outputManifest)
+  .output(outputPath)
   .on('start', () => {
     console.log('Starting DASH transcoding...');
   })
