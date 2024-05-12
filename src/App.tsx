@@ -17,6 +17,7 @@ import WebrtcPage from 'containers/webrtc';
 import Webrtc2Page from 'containers/webrtc2';
 import ThreejsPage from 'containers/threejs';
 import LfuPage from 'containers/large-file-upload';
+import LiveStreamPage from 'containers/live-stream';
 
 console.log('process.env.REACT_APP_ENV', process.env.REACT_APP_ENV)
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="webrtc2" element={<Webrtc2Page />} />
         <Route path="large-file-upload" element={<LfuPage />} />
         <Route path="threejs" element={<ThreejsPage />} />
+        <Route path="live-stream" element={<LiveStreamPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
