@@ -1,4 +1,6 @@
 /**
+ * 使用nodejs探索传统直播技术原理（不同于较新的webrtc协议）：
+ * 
  * 参考文档：https://github.com/illuspas/Node-Media-Server
  * 启动媒体服务器：node ./node-media-server.js
  * 进行直播推流（推送媒体流）：
