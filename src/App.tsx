@@ -18,6 +18,7 @@ import Webrtc2Page from 'containers/webrtc2';
 import ThreejsPage from 'containers/threejs';
 import LfuPage from 'containers/large-file-upload';
 import LiveStreamPage from 'containers/live-stream';
+import CorsPage from 'containers/cors'
 
 console.log('process.env.REACT_APP_ENV', process.env.REACT_APP_ENV)
 
@@ -38,6 +39,7 @@ function App() {
         <Route path="large-file-upload" element={<LfuPage />} />
         <Route path="threejs" element={<ThreejsPage />} />
         <Route path="live-stream" element={<LiveStreamPage />} />
+        <Route path="cors" element={<CorsPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

@@ -41,7 +41,9 @@
     "server:dev": "yarn build:dev && node server/index.js",
     "server:prod": "yarn build:prod && node server/index.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+
+    "watch:server2": "nodemon server/index2.js"
   },
   "eslintConfig": {
     "extends": [
