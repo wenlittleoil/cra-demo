@@ -17,7 +17,7 @@
   </div>
 
   <script>
-    const API_HOST = "http://localhost:3001";
+    const API_HOST = "https://localhost:3001";
     document.querySelector("#login").addEventListener("click", () => {
       fetch(`${API_HOST}/api/login`, {
         method: 'POST',
@@ -33,7 +33,9 @@
       });
     });
     document.querySelector("#get-protected-resource").addEventListener("click", () => {
-      fetch(`${API_HOST}/api/protected-resource`).then(res => res.text()).then(res => {
+      fetch(`${API_HOST}/api/protected-resource`, {
+        credentials: "include",
+      }).then(res => res.text()).then(res => {
         console.log("获取受保护的资源", res)
       });
     });

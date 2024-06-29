@@ -10,6 +10,7 @@ const https = require('https');
 const registeApi = require('./routes/registeApi');
 const WebSocket = require('ws');
 const { WebSocketServer } = WebSocket;
+const { secureServerOptions } = require('./config')
 
 const app = express();
 
@@ -30,8 +31,7 @@ app.get('*', function (req, res) {
 
 const port = 3000;
 const options = {
-  key: fs.readFileSync(path.join(__dirname, './key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, './cert.pem')),
+  ...secureServerOptions,
 };
 
 /**服务端使用WebSocket的nodejs实现库ws，客户端使用浏览器原生的WebSocket API */
