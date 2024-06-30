@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>index</title>
 </head>
 <body>
-  <h1>index2</h1>
+  <h1>模拟站点一</h1>
   <div>
     <button id="login">登录</button>
     <button id="logout">注销</button>
@@ -14,9 +14,8 @@
   <div>
     <button id="get-protected-resource">请求获取受保护的资源</button>
   </div>
-
   <script>
-    const API_HOST = "https://localhost:3001";
+    const API_HOST = "";
     document.querySelector("#login").addEventListener("click", () => {
       fetch(`${API_HOST}/api/login`, {
         method: 'POST',
