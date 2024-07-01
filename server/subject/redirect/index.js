@@ -31,7 +31,7 @@ app.get("/api/3", (req, res) => {
 app.get("/api/4", (req, res) => {
   console.log('访问了/api/4')
   // API请求的redirect，只会让浏览器重新发起redirect的API请求（并且是跨源的，同样受到浏览器同源策略的限制），不会导致网页级别的重定向
-  // 因为重定向的是跨源API，所以也不会带上cookie凭据
+  // 因为重定向的是域名完全不同的跨源API（指一级域名也不同），所以也不会带上cookie凭据
   return res.redirect("http://localhost:3002/getcookie");
 });
 
