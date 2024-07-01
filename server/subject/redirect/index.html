@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>index</title>
+</head>
+<body>
+  <div>
+    <button id="redirect-to-inner">点击重定向到本站路由</button>
+    <button id="redirect-to-outer">点击重定向到外站路由-baidu</button>
+    <button id="redirect-to-outer2">点击重定向到外站路由-localmachine2</button>
+  </div>
+  <script>
+    document.querySelector('#redirect-to-inner').addEventListener('click', () => {
+      fetch("/api/1").then(res => res.text()).then(console.log)
+    });
+    document.querySelector('#redirect-to-outer').addEventListener('click', () => {
+      fetch("/api/3").then(res => res.text()).then(console.log)
+    });
+    document.querySelector('#redirect-to-outer2').addEventListener('click', () => {
+      fetch("/api/4").then(res => res.text()).then(console.log)
+    });
+  </script>
+</body>
+</html>
