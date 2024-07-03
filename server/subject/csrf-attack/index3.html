@@ -19,6 +19,23 @@
 </head>
 <body>
   <h1>index3</h1>
-  <div onclick="forgeReqWithCredentials">点击攻击别人的网站</div>
+  <button onclick="forgeReqWithCredentials">点击攻击别人的网站（结果：攻击失败）</button>
+  <div style="color: red;">因为通过异步API提交的post请求，域名完全不同时压根无法共享cookie凭证，因此攻击无法奏效</div>
+
+  <div style="margin-top: 20px;">
+    <form 
+      action="https://localhost:3001/api/protected-resource" 
+      method="post" 
+    >
+      <div>
+        <input name="name" value="hacker" />
+      </div>
+      <div>
+        <input type="submit" value="点击提交表单攻击别人的网站（结果：攻击成功）" />
+        <div style="color: red;">因为通过form表单提交post请求会导致网页url发生跳转，从而提交了携带cookie凭证的恶意请求，因此攻击奏效了</div>
+      </div>
+    </form>
+  </div>
+
 </body>
 </html>

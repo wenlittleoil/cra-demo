@@ -59,6 +59,7 @@ app.get('/', (req, res) => {
   res.send(htmlStr);
 });
 
+// 异步请求登录接口
 app.post('/api/login', (req, res) => {
   // 模拟登录过程发放登录标示
   const expiresIn = 60 * 60 * 24 * 5 * 1000;
@@ -71,6 +72,22 @@ app.post('/api/login', (req, res) => {
     maxAge: expiresIn
   });
   res.send('login success!');
+});
+
+// 快捷登录接口（通过浏览器url直接打开）
+app.get('/api/quick-login', (req, res) => {
+  console.log('get /quick-login')
+  // 模拟登录过程发放登录标示
+  const expiresIn = 60 * 60 * 24 * 5 * 1000;
+  res.cookie("sessionId", "abc888", {
+    sameSite: "none",
+    secure: true,
+
+    httpOnly: true,
+    domain: 'localhost',
+    maxAge: expiresIn
+  });
+  res.send('quick-login success!');
 });
 
 app.post('/api/logout', (req, res) => {
@@ -87,6 +104,17 @@ app.get('/api/protected-resource', (req, res) => {
     res.send('获取受保护的资源-成功!');
   } else {
     res.send('获取受保护的资源-失败');
+  }
+});
+
+app.post('/api/protected-resource', (req, res) => {
+  // 模拟请求操作受保护的资源
+  const sid = req.cookies['sessionId'];
+  console.log('登录标示:', sid);
+  if (sid) {
+    res.send('操作受保护的资源-成功!');
+  } else {
+    res.send('操作受保护的资源-失败');
   }
 });
 
