@@ -38,21 +38,22 @@ app.use(express.urlencoded())
 
 app.get("/", (req, res) => {
   console.log('req.session: ', req.session)
-  if (req.session.user) {
-    res.send(html`
-      <div>
-        <span>Hello i'm ${JSON.stringify(req.session.user)}</span>
-        <a>Logout</a>
-      </div>
-    `);
+  const user = req.session.user;
+  if (user) {
+    res.send(html(`
+      <form action="/auth/logout" method="post">
+        <div>Hello i'm ${JSON.stringify(user)}</div>
+        <div><button type="submit">注销</button></div>
+      </form>
+    `));
   } else {
-    res.send(html`
+    res.send(html(`
       <form action="/auth/login" method="post">
         <div><input name="username" placeholder="请输入用户名" /></div>
         <div><input name="password" placeholder="请输入密码" /></div>
         <div><button type="submit">登录</button></div>
       </form>
-    `);
+    `));
   }
 });
 
@@ -73,13 +74,14 @@ app.post("/auth/login", (req, res) => {
     res.status(204).json(resBody);
     return;
   }
-  res.status(200).json({ message: `${username} login success`});
-  
+  req.session.user = username;
+  return res.redirect("/");
 });
 
 // 授权中心注销登录
 app.post("/auth/logout", (req, res) => {
-  
+  req.session.user = null;
+  return res.redirect("/");
 });
 
 // 授权中心检查业务方的登录态
@@ -91,13 +93,13 @@ app.get("/check/login", (req, res) => {
     // return res.redirect(`${from}?ticket=666888`);
   } else {
     // 全局未登录，让其前往登录
-    return res.send(html`
+    return res.send(html(`
       <form action="/auth/login?from=${from}" method="post">
         <div><input name="username" placeholder="请输入用户名" /></div>
         <div><input name="password" placeholder="请输入密码" /></div>
         <div><button type="submit">登录</button></div>
       </form>
-    `);
+    `));
   }
 })
 
