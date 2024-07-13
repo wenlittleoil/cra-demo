@@ -15,7 +15,7 @@
       } else if (res?.errCode === 302) {
         // 相当于302 redirect到sso鉴权服务中心
         const authCenter = "http://localhost:3000";
-        const url = `${authCenter}/auth/login?from=${encodeURIComponent(window.location.href)}`;
+        const url = `${authCenter}/check/login?from=${encodeURIComponent(window.location.href)}`;
         window.location.replace(url);
       }
     }).catch(console.log)

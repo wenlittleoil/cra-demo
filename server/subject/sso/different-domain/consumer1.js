@@ -1,3 +1,7 @@
+/**
+ * 业务方1（sso消费端）
+ * 采用前后端分离架构
+ */
 const express = require('express')
 const path = require('path')
 const app = express()
