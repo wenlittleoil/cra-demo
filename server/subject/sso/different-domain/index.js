@@ -4,8 +4,10 @@
  */
 const express = require('express')
 const app = express()
-const session = require('express-session')
+const session = require('express-session');
+const md5 = require('md5');
 const port = 3000
+const { secret } = require('./common')
 
 const users = [
   {
@@ -34,7 +36,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: false }))
 
 app.get("/", (req, res) => {
   console.log('req.session: ', req.session)
@@ -75,6 +77,12 @@ app.post("/auth/login", (req, res) => {
     return;
   }
   req.session.user = username;
+  if (from) {
+    // 登录成功，发放ticket
+    const ticket = md5(`${user}${secret}`);
+    console.log('登录成功，发放ticket', user, ticket)
+    return res.redirect(`${from}?ticket=${ticket}`);
+  }
   return res.redirect("/");
 });
 
@@ -87,10 +95,13 @@ app.post("/auth/logout", (req, res) => {
 // 授权中心检查业务方的登录态
 app.get("/check/login", (req, res) => {
   const { from } = req.query;
-  if (req.session.user) {
+  const user = req.session.user;
+  console.log('/check/login', user);
+  if (user) {
     // 全局已登录用户，发放ticket
-    console.log('全局已登录用户，发放ticket', req.session.user)
-    // return res.redirect(`${from}?ticket=666888`);
+    const ticket = md5(`${user}${secret}`);
+    console.log('全局已登录用户，发放ticket', user, ticket);
+    return res.redirect(`${from}?ticket=${ticket}`);
   } else {
     // 全局未登录，让其前往登录
     return res.send(html(`
@@ -101,7 +112,19 @@ app.get("/check/login", (req, res) => {
       </form>
     `));
   }
-})
+});
+
+// 授权中心接受业务后端的请求，校验ticket合法性，并对业务后端发放用户信息（或加密后的用户信息）
+app.get("/check/verifyAndGetUserInfo", (req, res) => {
+  const { ticket } = req.query;
+  const currentUserTicket = md5(`${req.session.user}${secret}`);
+  // req.session.user -> always undefined (后端服务之间调用没有会话连接)
+  console.log("/check/verifyAndGetUserInfo", req.session.user, ticket, currentUserTicket)
+  if (ticket !== currentUserTicket) {
+    return res.status(404).json({ message: "Invalid ticket" });
+  }
+  return res.status(200).json({ data: req.session.user, message: "Verify ticket and get user info successfully" });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
