@@ -32,9 +32,10 @@ app.use(async (req, res, next) => {
        * 以ticket为凭证，前往sso授权服务中心校验并交换得到用户信息
        * （这里可选择采用jwt对用户信息进行非对称加密）
        */
-      const res = await axios.get(`${authCenter}/check/verifyAndGetUserInfo?ticket=${ticket}`);
-      console.log("[业务方根据ticket获取用户信息]：", ticket, res)
-      req.session.user = res.data;
+      const response = await axios.get(`${authCenter}/check/verifyAndGetUserInfo?ticket=${ticket}`);
+      const resBody = response.data;
+      console.log("[业务方根据ticket获取用户信息]：", ticket, resBody)
+      req.session.user = resBody.data;
     } catch(err) {
       console.log('[校验并交换得到用户信息-发生失败]', ticket, err);
     }

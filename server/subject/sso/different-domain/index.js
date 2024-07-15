@@ -16,6 +16,8 @@ const users = [
   }
 ];
 
+const loginedUsers = {}
+
 const html = str => `
   <!DOCTYPE html>
   <html lang="en">
@@ -77,10 +79,14 @@ app.post("/auth/login", (req, res) => {
     return;
   }
   req.session.user = username;
+
+  // 记录ticket和已登录用户之间的映射关系
+  const ticket = md5(`${req.session.user}${secret}`);
+  loginedUsers[ticket] = req.session.user;
+
   if (from) {
     // 登录成功，发放ticket
-    const ticket = md5(`${user}${secret}`);
-    console.log('登录成功，发放ticket', user, ticket)
+    console.log('登录成功，发放ticket', req.session.user, ticket)
     return res.redirect(`${from}?ticket=${ticket}`);
   }
   return res.redirect("/");
@@ -88,7 +94,15 @@ app.post("/auth/login", (req, res) => {
 
 // 授权中心注销登录
 app.post("/auth/logout", (req, res) => {
+  // 删除ticket和已登录用户之间的映射关系
+  const ticket = md5(`${req.session.user}${secret}`);
+  delete loginedUsers[ticket];
+
+  // 清除授权中心的登录态
   req.session.user = null;
+
+  // 还需要通知各业务方清除本地各自的登录态
+
   return res.redirect("/");
 });
 
@@ -116,14 +130,13 @@ app.get("/check/login", (req, res) => {
 
 // 授权中心接受业务后端的请求，校验ticket合法性，并对业务后端发放用户信息（或加密后的用户信息）
 app.get("/check/verifyAndGetUserInfo", (req, res) => {
+  // 由于后端服务之间调用没有会话连接维持，因此通过ticket和已登录用户之间的映射关系来校验ticket合法性
   const { ticket } = req.query;
-  const currentUserTicket = md5(`${req.session.user}${secret}`);
-  // req.session.user -> always undefined (后端服务之间调用没有会话连接)
-  console.log("/check/verifyAndGetUserInfo", req.session.user, ticket, currentUserTicket)
-  if (ticket !== currentUserTicket) {
+  console.log("/check/verifyAndGetUserInfo", ticket, loginedUsers[ticket])
+  if (!ticket || !loginedUsers[ticket]) {
     return res.status(404).json({ message: "Invalid ticket" });
   }
-  return res.status(200).json({ data: req.session.user, message: "Verify ticket and get user info successfully" });
+  return res.status(200).json({ data: loginedUsers[ticket], message: "Verify ticket and get user info successfully" });
 });
 
 app.listen(port, () => {
