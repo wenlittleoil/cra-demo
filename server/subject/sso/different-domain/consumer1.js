@@ -60,13 +60,11 @@ app.get("/api/protected-resource", authenticated, (req, res) => {
 });
 
 // 业务方提供注销本地session登录态的内部API，需要在sso授权服务中心完成注册，并在用户注销登录时完成调用
-app.post("/internal/api/logout", (req, res) => {
-  console.log("/internal/api/logout")
-  // 无效清除本地登录态（原因：服务端之间不存在session维持）
-  // req.session.user = null;
-  // 有效清除本地登录态
+app.post("/internal/api/logout", async (req, res) => {
   const { sessionID } = req.query;
+  // 清除本地登录态
   sessionStore.destroy(sessionID, err => {
+    console.log("/internal/api/logout", sessionID, err)
     if (err) {
       return res.status(400).json({ errCode: 999, data: null, message: 'Clear local session failed' });
     }

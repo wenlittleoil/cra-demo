@@ -9,17 +9,6 @@ const axios = require('axios');
 const md5 = require('md5');
 const port = 3000
 const { secret } = require('./common');
-const jwt = require('jsonwebtoken');
-
-// const JWT_SECRET = "sakdk43idKSOI34EjfHSIWEOi85rc49392utidfjue90OsCWo";
-// const expiredToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njk5YWIiLCJpYXQiOjE3MjEyMzEzNzksImV4cCI6MTcyMTIzMzE3OX0.HdNy_tzos3jKv7c93MLRNm3GId8SsSSZBY792OTpe3c";
-// const token = jwt.sign({ userId: '6699ab' }, JWT_SECRET, {
-//   expiresIn: '1800s',
-// });
-// console.log("测试生成token", token)
-// jwt.verify(expiredToken, JWT_SECRET, (err, data) => {
-//   console.log('验证token结果', err, data);
-// });
 
 // 用户表
 const users = [
@@ -42,8 +31,11 @@ const allowBusinessOrigins = {
 // 记录ticket和已登录用户之间的映射关系
 const loginedUsers = {}
 
-// 记录全局session和局部sessionID之间的关系，格式类如{ "globalSessionID": { "consumerAppName": "consumerSessionID" } }
-const sessionRelations = {}
+/**
+ * 记录ticket和全局session/局部sessions之间的映射关系，
+ * 格式类如{ "ticket": { globalSessionId: "...", localSessionIds: { "consumerAppName": "consumerSessionID" } } }
+ */
+const loginedSessions = {}
 
 const html = str => `
   <!DOCTYPE html>
@@ -111,6 +103,12 @@ app.post("/auth/login", (req, res) => {
   const ticket = md5(`${req.session.user}${secret}`);
   loginedUsers[ticket] = req.session.user;
 
+  // 记录ticket和sessions关系
+  loginedSessions[ticket] = {
+    globalSessionId: req.sessionID,
+    localSessionIds: {},
+  }
+
   if (from) {
     // 登录成功，发放ticket
     console.log('登录成功，发放ticket', req.session.user, ticket)
@@ -129,21 +127,21 @@ app.post("/auth/logout", (req, res) => {
   req.session.user = null;
 
   // 还需要通知各业务方清除各自的本地登录态
-  // const consumerSessions = sessionRelations[req.sessionID];
-  // console.log('全局logout测试', sessionRelations, req.sessionID, consumerSessions)
-  // const promises = Object.keys(consumerSessions).map(consumerAppName => {
-  //   const consumerOrigin = allowBusinessOrigins[consumerAppName];
-  //   const consumerSessionID = consumerSessions[consumerAppName];
-  //   return axios.post(`${consumerOrigin}/internal/api/logout?sessionID=${consumerSessionID}`);
-  // });
-  // Promise.allSettled(promises)
-  //   .then(res => {
-  //     console.log("业务方清除本地session-成功", res);
-  //   }).catch(err => {
-  //     console.log("业务方清除本地session-失败", err);
-  //   }).finally(() => {
-  //     delete sessionRelations[req.sessionID];
-  //   });
+  const localSessionIds = loginedSessions[ticket].localSessionIds;
+  console.log('loginedSessions,localSessionIds: ', loginedSessions, localSessionIds)
+  const promises = Object.keys(localSessionIds).map(consumerAppName => {
+    const consumerOrigin = allowBusinessOrigins[consumerAppName];
+    const consumerSessionID = localSessionIds[consumerAppName];
+    return axios.post(`${consumerOrigin}/internal/api/logout?sessionID=${consumerSessionID}`);
+  });
+  Promise.allSettled(promises)
+    .then(res => {
+      console.log("业务方清除本地session-成功", res);
+    }).catch(err => {
+      console.log("业务方清除本地session-失败", err);
+    }).finally(() => {
+      delete loginedSessions[ticket];
+    });
 
   return res.redirect("/");
 });
@@ -178,17 +176,22 @@ app.get("/check/verifyAndGetUserInfo", (req, res) => {
   if (!ticket || !loginedUsers[ticket]) {
     return res.status(404).json({ message: "Invalid ticket" });
   }
+  if (!app || !allowBusinessOrigins[app]) {
+    return res.status(404).json({ message: "Access deny" }); 
+  }
+  if (!loginedSessions[ticket]) {
+    return res.status(404).json({ message: "Unauthorized" }); 
+  }
+  // 通过ticket添加业务消费方局部session
+  loginedSessions[ticket] = {
+    ...loginedSessions[ticket],
+    localSessionIds: {
+      ...loginedSessions[ticket].localSessionIds,
+      [app]: sessionID,
+    },
+  }
 
-  // 维持后端服务之间的session关系（授权中心的全局session和业务消费方的局部session之间的关系）
-  // if (!app || !allowBusinessOrigins[app]) {
-  //   return res.status(404).json({ message: "Access deny" }); 
-  // }
-  // const globalSessionID = req.sessionID; // ?
-  // sessionRelations[globalSessionID] = {
-  //   ...sessionRelations[globalSessionID],
-  //   [app]: sessionID,
-  // }
-  // console.log('sessionRelations: ', sessionRelations)
+  console.log('loginedSessions: ', loginedSessions)
 
   // 校验通过
   return res.status(200).json({ data: loginedUsers[ticket], message: "Verify ticket and get user info successfully" });
