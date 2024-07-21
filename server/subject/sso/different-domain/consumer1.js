@@ -9,6 +9,7 @@ const app = express()
 const session = require('express-session');
 const port = 3001
 const APP_NAME = "consumer1"
+const htmlPage = "consumer1.html"
 
 // 公共鉴权中间件
 const authenticated = (req, res, next) => {
@@ -50,7 +51,7 @@ app.use(async (req, res, next) => {
 
 // 访问前端页面
 app.get("/", (req, res) => {
-  const file = path.join(__dirname, 'consumer1.html')
+  const file = path.join(__dirname, htmlPage)
   res.sendFile(file);
 });
 

@@ -1,1 +1,31 @@
 <!-- 同consumer1.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>业务消费方2</title>
+</head>
+<body>
+  <div id="userInfo"></div>
+  <script>
+    fetch("/api/protected-resource").then(res => res.json()).then(res => {
+      const ele = document.getElementById("userInfo");
+      if (res?.errCode === 0) {
+        ele.innerText = `用户已登录: ${JSON.stringify(res?.data)}`;
+      } else if (res?.errCode === 302) {
+        // 相当于302 redirect到sso鉴权服务中心
+        const authCenter = "http://sso.center.com:3000";
+        const url = `${authCenter}/check/login?from=${encodeURIComponent(window.location.href)}`;
+        window.location.replace(url);
+      }
+    }).catch(console.log)
+  </script>
+  <script>
+    if (window.location.search.includes('ticket')) {
+      // 移除浏览器页面url中的ticket参数
+      window.history.replaceState?.(null, "", window.location.pathname);
+    }
+  </script>
+</body>
+</html>
