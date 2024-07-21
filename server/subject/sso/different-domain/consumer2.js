@@ -1,1 +1,1 @@
-// 同consumer1.js，将端口号port改成3002
+// 同consumer1.js，将端口号port改成3002，APP_NAME改成consumer2
