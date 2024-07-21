@@ -20,5 +20,11 @@
       }
     }).catch(console.log)
   </script>
+  <script>
+    if (window.location.search.includes('ticket')) {
+      // 移除浏览器页面url中的ticket参数
+      window.history.replaceState?.(null, "", window.location.pathname);
+    }
+  </script>
 </body>
 </html>

@@ -8,6 +8,7 @@ const path = require('path')
 const app = express()
 const session = require('express-session');
 const port = 3001
+const APP_NAME = "consumer1"
 
 // 公共鉴权中间件
 const authenticated = (req, res, next) => {
@@ -17,10 +18,14 @@ const authenticated = (req, res, next) => {
   next();
 }
 
+// 开发环境使用
+const sessionStore = new session.MemoryStore();
+// 生成或维持session
 app.use(session({
   secret: 'business-consumer-one',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: sessionStore, 
 }))
  
 const authCenter = "http://sso.center.com:3000";
@@ -29,10 +34,10 @@ app.use(async (req, res, next) => {
   if (ticket) {
     try {
       /**
-       * 以ticket为凭证，前往sso授权服务中心校验并交换得到用户信息
-       * （这里可选择采用jwt对用户信息进行非对称加密）
+       * 以ticket为凭证，前往sso授权服务中心校验并交换得到用户信息（这里可选择采用jwt对用户信息进行非对称加密），
+       * 并把自己本地sessionID注册到授权中心（与授权中心的全局sessionID完成关联, 供single-logout使用）。
        */
-      const response = await axios.get(`${authCenter}/check/verifyAndGetUserInfo?ticket=${ticket}`);
+      const response = await axios.get(`${authCenter}/check/verifyAndGetUserInfo?ticket=${ticket}&app=${APP_NAME}&sessionID=${req.sessionID}`);
       const resBody = response.data;
       console.log("[业务方根据ticket获取用户信息]：", ticket, resBody)
       req.session.user = resBody.data;
@@ -43,6 +48,7 @@ app.use(async (req, res, next) => {
   next()
 });
 
+// 访问前端页面
 app.get("/", (req, res) => {
   const file = path.join(__dirname, 'consumer1.html')
   res.sendFile(file);
@@ -51,6 +57,21 @@ app.get("/", (req, res) => {
 // 访问受到保护的资源
 app.get("/api/protected-resource", authenticated, (req, res) => {
   res.status(200).json({ errCode: 0, data: req.session.user });
+});
+
+// 业务方提供注销本地session登录态的内部API，需要在sso授权服务中心完成注册，并在用户注销登录时完成调用
+app.post("/internal/api/logout", (req, res) => {
+  console.log("/internal/api/logout")
+  // 无效清除本地登录态（原因：服务端之间不存在session维持）
+  // req.session.user = null;
+  // 有效清除本地登录态
+  const { sessionID } = req.query;
+  sessionStore.destroy(sessionID, err => {
+    if (err) {
+      return res.status(400).json({ errCode: 999, data: null, message: 'Clear local session failed' });
+    }
+    res.status(200).json({ errCode: 0, data: null, message: 'Clear local session successfully' });
+  });
 });
 
 app.listen(port, () => {
